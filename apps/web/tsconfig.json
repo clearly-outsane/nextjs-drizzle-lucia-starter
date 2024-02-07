@@ -6,7 +6,10 @@
         "name": "next"
       }
     ],
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": ["./app/*"]
+    }
   },
   "include": [
     "next-env.d.ts",

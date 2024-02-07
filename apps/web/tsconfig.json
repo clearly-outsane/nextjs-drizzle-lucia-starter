@@ -8,8 +8,10 @@
     ],
     "allowImportingTsExtensions": true,
     "paths": {
-      "@/*": ["./app/*"]
-    }
+      "@/*": ["./app/*"],
+      "@ui/*": ["../../packages/ui/src/*"]
+    },
+    "baseUrl": "."
   },
   "include": [
     "next-env.d.ts",

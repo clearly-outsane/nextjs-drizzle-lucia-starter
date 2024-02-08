@@ -1,5 +1,5 @@
 // app/login/github/callback/route.ts
-import { google, lucia } from "@/auth";
+import { google, lucia } from "lib/auth/auth";
 import { cookies } from "next/headers";
 import { OAuth2RequestError } from "arctic";
 import { generateId } from "lucia";
@@ -7,7 +7,6 @@ import { db } from "db/drizzle";
 import { userTable } from "db/schema";
 
 export async function GET(request: Request): Promise<Response> {
-  console.log("request", cookies().getAll());
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
@@ -19,7 +18,7 @@ export async function GET(request: Request): Promise<Response> {
       status: 400,
     });
   }
-
+  console.log("here");
   try {
     const tokens = await google.validateAuthorizationCode(
       code,
@@ -34,12 +33,13 @@ export async function GET(request: Request): Promise<Response> {
       }
     );
     const googleUser = await response.json();
-    console.log("googleUser", googleUser);
+
     // const existingUser = await db.table("user").where("github_id", "=", githubUser.id).get();
 
     const existingUser = await db.query.userTable.findFirst({
       where: (table, { eq, or }) => eq(table.email, googleUser.email!),
     });
+    console.log("existingUser", existingUser);
 
     if (existingUser) {
       const session = await lucia.createSession(existingUser.id, {});
@@ -56,6 +56,7 @@ export async function GET(request: Request): Promise<Response> {
         },
       });
     }
+    console.log("here 2");
 
     const userId = generateId(15);
     await db.insert(userTable).values({

@@ -14,6 +14,8 @@ export const userTable = pgTable("user", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
 });
 
+export type User = typeof userTable.$inferSelect;
+
 export const sessionTable = pgTable("session", {
   id: text("id").primaryKey(),
   userId: text("user_id")

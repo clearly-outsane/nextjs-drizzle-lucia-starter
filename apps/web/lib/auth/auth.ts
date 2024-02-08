@@ -1,6 +1,7 @@
 import { Lucia } from "lucia";
-import { adapter } from "../db/drizzle";
+import { adapter } from "../../db/drizzle";
 import { Google } from "arctic";
+import { type User as DbUser } from "@/../db/schema";
 
 export const google = new Google(
   process.env.GOOGLE_CLIENT_ID!,
@@ -21,8 +22,8 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       // attributes has the type of DatabaseUserAttributes
-      githubId: attributes.github_id,
-      username: attributes.username,
+      id: attributes.id,
+      email: attributes.email,
     };
   },
 });
@@ -35,7 +36,4 @@ declare module "lucia" {
   }
 }
 
-interface DatabaseUserAttributes {
-  github_id: number;
-  username: string;
-}
+interface DatabaseUserAttributes extends Omit<DbUser, "hashedPassword"> {}

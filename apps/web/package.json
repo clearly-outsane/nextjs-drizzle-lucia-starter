@@ -14,6 +14,7 @@
     "@lucia-auth/adapter-drizzle": "^1.0.1",
     "@neondatabase/serverless": "^0.8.0",
     "@repo/ui": "workspace:*",
+    "arctic": "^1.1.4",
     "drizzle-orm": "^0.29.3",
     "lucia": "^3.0.1",
     "next": "^14.0.4",

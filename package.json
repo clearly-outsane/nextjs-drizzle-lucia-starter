@@ -7,6 +7,8 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "dev:web": "dotenv -- turbo dev --filter=web",
+    "generate:web": "pnpm --filter web generate",
+    "db:push": "dotenv -- pnpm --filter web db:push",
     "ui:add": "pnpm --filter @repo/ui ui:add"
   },
   "devDependencies": {

@@ -3,8 +3,8 @@ import { google, lucia } from "lib/auth/auth";
 import { cookies } from "next/headers";
 import { OAuth2RequestError } from "arctic";
 import { generateId } from "lucia";
-import { db } from "db/drizzle";
-import { userTable } from "db/schema";
+import { db } from "@/lib/db/drizzle";
+import { userTable } from "@/lib/db/schema";
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
@@ -33,13 +33,11 @@ export async function GET(request: Request): Promise<Response> {
       }
     );
     const googleUser = await response.json();
-
-    // const existingUser = await db.table("user").where("github_id", "=", githubUser.id).get();
+    console.log("googleUser", googleUser);
 
     const existingUser = await db.query.userTable.findFirst({
-      where: (table, { eq, or }) => eq(table.googleId, googleUser.sub),
+      where: (table, { eq }) => eq(table.googleId, googleUser.sub),
     });
-    console.log("existingUser", existingUser);
 
     if (existingUser) {
       const session = await lucia.createSession(existingUser.id, {});
@@ -56,17 +54,19 @@ export async function GET(request: Request): Promise<Response> {
         },
       });
     }
-    console.log("here 2");
 
     const userId = generateId(15);
     await db.insert(userTable).values({
       id: userId,
+      name: googleUser.name,
       email: googleUser.email,
       googleId: googleUser.sub,
       createdAt: new Date(),
       avatar: googleUser.picture,
       updatedAt: new Date(),
     });
+
+    console.log("after user created");
 
     const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);

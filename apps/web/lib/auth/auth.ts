@@ -1,7 +1,7 @@
 import { Lucia } from "lucia";
-import { adapter } from "../../db/drizzle";
+import { adapter } from "../db/drizzle";
 import { Google } from "arctic";
-import { type User as DbUser } from "@/../db/schema";
+import { type User as DbUser } from "@/lib/db/schema";
 
 export const google = new Google(
   process.env.GOOGLE_CLIENT_ID!,

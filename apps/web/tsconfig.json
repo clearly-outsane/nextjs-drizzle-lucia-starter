@@ -8,7 +8,7 @@
     ],
     "allowImportingTsExtensions": true,
     "paths": {
-      "@/*": ["./app/*"],
+      "@/*": ["./*"],
       "@ui/*": ["../../packages/ui/src/*"]
     },
     "baseUrl": "."

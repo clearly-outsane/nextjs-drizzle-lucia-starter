@@ -7,13 +7,18 @@ import {
   integer,
 } from "drizzle-orm/pg-core";
 
-export const userTable = pgTable("user", {
+export const userTable = pgTable("users", {
   id: text("id").primaryKey(),
   googleId: text("google_id").unique(),
+  name: text("name").notNull(),
   email: text("email").unique().notNull(),
   avatar: text("avatar").notNull().default(""),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 export type User = typeof userTable.$inferSelect;

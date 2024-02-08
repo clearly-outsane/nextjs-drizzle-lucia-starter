@@ -24,6 +24,8 @@ export const lucia = new Lucia(adapter, {
       // attributes has the type of DatabaseUserAttributes
       id: attributes.id,
       email: attributes.email,
+      createdAt: attributes.createdAt,
+      updatedAt: attributes.updatedAt,
     };
   },
 });
@@ -36,4 +38,4 @@ declare module "lucia" {
   }
 }
 
-interface DatabaseUserAttributes extends Omit<DbUser, "hashedPassword"> {}
+interface DatabaseUserAttributes extends DbUser {}

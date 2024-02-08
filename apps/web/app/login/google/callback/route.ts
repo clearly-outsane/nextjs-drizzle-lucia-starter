@@ -7,6 +7,7 @@ import { db } from "db/drizzle";
 import { userTable } from "db/schema";
 
 export async function GET(request: Request): Promise<Response> {
+  console.log("request", cookies().getAll());
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");

@@ -18,5 +18,13 @@ export async function GET(): Promise<Response> {
     sameSite: "lax",
   });
 
+  cookies().set("code_verifier", codeVerifier, {
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    maxAge: 60 * 10,
+    sameSite: "lax",
+  });
+
   return Response.redirect(url);
 }

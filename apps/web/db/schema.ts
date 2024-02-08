@@ -9,7 +9,9 @@ import {
 
 export const userTable = pgTable("user", {
   id: text("id").primaryKey(),
+  googleId: text("google_id").unique(),
   email: text("email").unique().notNull(),
+  avatar: text("avatar").notNull().default(""),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
 });

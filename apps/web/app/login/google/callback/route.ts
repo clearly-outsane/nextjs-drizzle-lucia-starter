@@ -11,14 +11,14 @@ export async function GET(request: Request): Promise<Response> {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const storedState = cookies().get("google_oauth_state")?.value ?? null;
-  const storedCodeVerifier = cookies().get("code_verifier")?.value ?? "";
+  const storedCodeVerifier =
+    cookies().get("google_oauth_code_verifier")?.value ?? "";
 
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,
     });
   }
-  console.log("here");
   try {
     const tokens = await google.validateAuthorizationCode(
       code,
@@ -37,7 +37,7 @@ export async function GET(request: Request): Promise<Response> {
     // const existingUser = await db.table("user").where("github_id", "=", githubUser.id).get();
 
     const existingUser = await db.query.userTable.findFirst({
-      where: (table, { eq, or }) => eq(table.email, googleUser.email!),
+      where: (table, { eq, or }) => eq(table.googleId, googleUser.sub),
     });
     console.log("existingUser", existingUser);
 
@@ -62,7 +62,9 @@ export async function GET(request: Request): Promise<Response> {
     await db.insert(userTable).values({
       id: userId,
       email: googleUser.email,
+      googleId: googleUser.sub,
       createdAt: new Date(),
+      avatar: googleUser.picture,
       updatedAt: new Date(),
     });
 
@@ -95,5 +97,5 @@ export async function GET(request: Request): Promise<Response> {
 
 interface GoogleUser {
   id: string;
-  login: string;
+  picture: string;
 }

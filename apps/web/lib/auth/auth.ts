@@ -23,6 +23,7 @@ export const lucia = new Lucia(adapter, {
     return {
       // attributes has the type of DatabaseUserAttributes
       id: attributes.id,
+      name: attributes.name,
       email: attributes.email,
       createdAt: attributes.createdAt,
       updatedAt: attributes.updatedAt,

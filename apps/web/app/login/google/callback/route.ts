@@ -33,7 +33,6 @@ export async function GET(request: Request): Promise<Response> {
       }
     );
     const googleUser = await response.json();
-    console.log("googleUser", googleUser);
 
     const existingUser = await db.query.userTable.findFirst({
       where: (table, { eq }) => eq(table.googleId, googleUser.sub),
@@ -65,8 +64,6 @@ export async function GET(request: Request): Promise<Response> {
       avatar: googleUser.picture,
       updatedAt: new Date(),
     });
-
-    console.log("after user created");
 
     const session = await lucia.createSession(userId, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
